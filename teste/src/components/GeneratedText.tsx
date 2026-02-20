@@ -1,6 +1,8 @@
-import type { GeneratedTextProps } from "../types";
+interface Props {
+  text: string;
+}
 
-const GeneratedText: React.FC<GeneratedTextProps> = ({ text }) => {
+const GeneratedText: React.FC<Props> = ({ text }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
   };

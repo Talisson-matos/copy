@@ -1,41 +1,71 @@
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #1f1f1f, #2c2c2c);
-  color: white;
+  background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
+  color: #f5f5f5;
 }
 
 .container {
   max-width: 900px;
   margin: auto;
-  padding: 20px;
+  padding: 25px;
 }
 
 h1 {
   text-align: center;
-  font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  color: white;
 }
 
 .main-input {
   width: 100%;
-  min-height: 80px;
-  padding: 10px;
+  min-height: 90px;
+  padding: 12px;
   border-radius: 10px;
-  border: none;
-  resize: vertical;
-  font-size: 14px;
+  border: 1px solid #333;
+  background: #121212;
+  color: #fff;
 }
 
-.parse-btn {
-  margin-top: 10px;
-  padding: 8px 15px;
-  border: none;
+.main-input:focus {
+  outline: none;
+  border-color: silver;
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.4);
+}
+
+.input-group,
+.form-row {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
   border-radius: 8px;
-  background: #00c896;
-  color: black;
-  font-weight: bold;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: white;
+}
+
+button {
+  background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
+  border: 1px solid #444;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+button:hover {
+  background: silver;
+  color: black;
+}
+
+.danger-btn {
+  margin-top: 12px;
 }
 
 .tokens-container {
@@ -45,43 +75,43 @@ h1 {
   gap: 10px;
 }
 
+.token-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .token {
   padding: 8px 14px;
   border-radius: 20px;
-  border: none;
-  background: #3a3a3a;
+  border: 1px solid #444;
+  background: #2a2a2a;
   color: white;
   cursor: pointer;
-  transition: 0.2s;
-  font-size: 13px;
 }
 
 .token:hover {
-  background: #00c896;
+  background: silver;
   color: black;
 }
 
-.editing {
-  background: #222;
-  outline: 2px solid #00c896;
+.merge-btn {
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: #1a1a1a;
+  border: 1px solid #555;
+  color: silver;
 }
 
-.form-section {
-  margin-top: 30px;
+.merge-btn:hover {
+  background: silver;
+  color: black;
 }
 
-.form-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.form-row input {
-  flex: 1;
-  min-width: 100px;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+.merge-active {
+  border: 2px solid silver;
+  box-shadow: 0 0 8px rgba(192, 192, 192, 0.6);
 }
 
 .generated-container {
@@ -92,30 +122,16 @@ h1 {
 }
 
 .generated-item {
-  background: #3a3a3a;
-  padding: 8px 12px;
+  background: #2a2a2a;
+  padding: 10px;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.generated-item button {
-  background: #00c896;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
 }
 
 @media (max-width: 600px) {
+  .input-group,
   .form-row {
     flex-direction: column;
-  }
-
-  .token {
-    font-size: 12px;
-    padding: 6px 10px;
   }
 }

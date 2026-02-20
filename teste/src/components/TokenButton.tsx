@@ -1,16 +1,42 @@
 import { useState, useRef } from "react";
-import type { TokenButtonProps } from "../types";
 
-const TokenButton: React.FC<TokenButtonProps> = ({
+interface Props {
+  text: string;
+  onDelete: () => void;
+  onUpdate: (value: string) => void;
+  onTripleClick: () => void;
+  isMerging: boolean;
+}
+
+const TokenButton: React.FC<Props> = ({
   text,
   onDelete,
   onUpdate,
+  onTripleClick,
+  isMerging,
 }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [clickCount, setClickCount] = useState<number>(0);
   const holdTimeout = useRef<number | null>(null);
+  const clickTimeout = useRef<number | null>(null);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
+  const handleClick = () => {
+    setClickCount((prev) => prev + 1);
+
+    if (clickTimeout.current) clearTimeout(clickTimeout.current);
+
+    clickTimeout.current = window.setTimeout(() => {
+      if (clickCount === 0) {
+        navigator.clipboard.writeText(text);
+      }
+      if (clickCount === 1) {
+        onDelete();
+      }
+      if (clickCount >= 2) {
+        onTripleClick();
+      }
+      setClickCount(0);
+    }, 250);
   };
 
   const handleMouseDown = () => {
@@ -20,9 +46,7 @@ const TokenButton: React.FC<TokenButtonProps> = ({
   };
 
   const handleMouseUp = () => {
-    if (holdTimeout.current) {
-      clearTimeout(holdTimeout.current);
-    }
+    if (holdTimeout.current) clearTimeout(holdTimeout.current);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
@@ -45,9 +69,8 @@ const TokenButton: React.FC<TokenButtonProps> = ({
 
   return (
     <button
-      className="token"
-      onClick={handleCopy}
-      onDoubleClick={onDelete}
+      className={`token ${isMerging ? "editing" : ""}`}
+      onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >

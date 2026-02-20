@@ -6,19 +6,22 @@ function App() {
   const [inputValue, setInputValue] = useState<string>("");
   const [tokens, setTokens] = useState<string[]>([]);
   const [manualToken, setManualToken] = useState<string>("");
+  const [sanitizeInput, setSanitizeInput] = useState<string>("");
 
   const [cte, setCte] = useState<string>("");
   const [mdfe, setMdfe] = useState<string>("");
   const [motorista, setMotorista] = useState<string>("");
 
-  // 🔥 Geração automática sempre que input muda
+  const [mergeIndex, setMergeIndex] = useState<number | null>(null);
+
+  // Separação por 1+ espaços
   useEffect(() => {
     if (!inputValue.trim()) {
       setTokens([]);
       return;
     }
 
-    const parts = inputValue.split(/\s{2,}/).filter(Boolean);
+    const parts = inputValue.split(/\s+/).filter(Boolean);
     setTokens(parts);
   }, [inputValue]);
 
@@ -44,9 +47,47 @@ function App() {
     setInputValue("");
     setTokens([]);
     setManualToken("");
+    setSanitizeInput("");
     setCte("");
     setMdfe("");
     setMotorista("");
+    setMergeIndex(null);
+  };
+
+  const handleSanitize = (value: string) => {
+    const cleaned = value.replace(/[^a-zA-Z0-9]/g, "");
+    if (!cleaned) return;
+
+    navigator.clipboard.writeText(cleaned);
+    setSanitizeInput("");
+  };
+
+  // 🔥 MODO FUSÃO
+  const handleMerge = (index: number) => {
+    if (mergeIndex === null) {
+      setMergeIndex(index);
+      return;
+    }
+
+    if (mergeIndex === index) {
+      setMergeIndex(null);
+      return;
+    }
+
+    setTokens((prev) => {
+      const first = prev[mergeIndex];
+      const second = prev[index];
+      const merged = `${first} ${second}`;
+
+      const newTokens = prev.filter(
+        (_, i) => i !== mergeIndex && i !== index
+      );
+
+      newTokens.push(merged);
+      return newTokens;
+    });
+
+    setMergeIndex(null);
   };
 
   return (
@@ -60,26 +101,28 @@ function App() {
         className="main-input"
       />
 
-      <button onClick={handleClearAll} className="parse-btn">
+      <button onClick={handleClearAll} className="danger-btn">
         Limpar Tudo
       </button>
 
-      {/* 🔥 Input Manual */}
-      <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+      <div className="input-group">
         <input
           placeholder="Criar botão manualmente..."
           value={manualToken}
           onChange={(e) => setManualToken(e.target.value)}
-          style={{
-            flex: 1,
-            padding: "8px",
-            borderRadius: "8px",
-            border: "none",
+        />
+        <button onClick={handleManualAdd}>Adicionar</button>
+      </div>
+
+      <div className="sanitize-box">
+        <input
+          placeholder="Colar aqui para remover pontuação e copiar automaticamente..."
+          value={sanitizeInput}
+          onChange={(e) => {
+            setSanitizeInput(e.target.value);
+            handleSanitize(e.target.value);
           }}
         />
-        <button onClick={handleManualAdd} className="parse-btn">
-          Adicionar
-        </button>
       </div>
 
       <div className="tokens-container">
@@ -89,6 +132,8 @@ function App() {
             text={token}
             onDelete={() => removeToken(index)}
             onUpdate={(val) => updateToken(index, val)}
+            onTripleClick={() => handleMerge(index)}
+            isMerging={mergeIndex === index}
           />
         ))}
       </div>
