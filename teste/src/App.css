@@ -1,137 +1,361 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ─── Reset & Base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(145deg, #0f0f0f, #1c1c1c);
-  color: #f5f5f5;
+  padding: 0;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 25px;
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d0d0d;
+  color: #f0f0f0;
+  min-height: 100vh;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: white;
+/* ─── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
 }
-
-.main-input {
-  width: 100%;
-  min-height: 90px;
-  padding: 12px;
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
-  border: 1px solid #333;
-  background: #121212;
+}
+
+/* ─── Animations ───────────────────────────────────────────── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Layout ───────────────────────────────────────────────── */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+}
+
+/* ─── Header ───────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+}
+
+.header-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(192, 192, 192, 0.3);
+  margin: 10px auto 0;
+}
+
+/* ─── Section Card ─────────────────────────────────────────── */
+.section {
+  margin-top: 28px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.section-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-label.no-margin {
+  margin-bottom: 0;
+}
+
+/* ─── Grids ────────────────────────────────────────────────── */
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.grid-three {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 12px;
+}
+
+/* ─── Inputs ───────────────────────────────────────────────── */
+input,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f0f0f0;
+  font-size: 14px;
+  font-family: 'DM Mono', 'Fira Mono', monospace;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(192, 192, 192, 0.4);
+  box-shadow: 0 0 0 2px rgba(192, 192, 192, 0.08);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+textarea.main-input {
+  min-height: 80px;
+  resize: vertical;
+  display: block;
+}
+
+/* ─── Buttons (generic) ────────────────────────────────────── */
+.btn {
+  padding: 9px 18px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: #d0d0d0;
+  cursor: pointer;
+  font-size: 13.5px;
+  letter-spacing: 0.03em;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: rgba(192, 192, 192, 0.18);
   color: #fff;
 }
 
-.main-input:focus {
-  outline: none;
-  border-color: silver;
-  box-shadow: 0 0 8px rgba(192, 192, 192, 0.4);
+.btn--subtle {
+  font-size: 12px;
+  padding: 5px 12px;
+  color: #999;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
-.input-group,
-.form-row {
-  margin-top: 15px;
+.btn--subtle:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn--danger {
+  font-size: 12px;
+  padding: 5px 12px;
+  color: #ff6b6b;
+  border-color: rgba(255, 100, 100, 0.2);
+  background: rgba(255, 100, 100, 0.07);
+}
+
+.btn--danger:hover {
+  background: rgba(255, 100, 100, 0.18);
+}
+
+/* ─── Input Row ────────────────────────────────────────────── */
+.input-row {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
-input {
+.input-row input {
   flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #333;
-  background: #1a1a1a;
-  color: white;
 }
 
-button {
-  background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
-  border: 1px solid #444;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+/* ─── Tokens ───────────────────────────────────────────────── */
+.tokens-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-button:hover {
-  background: silver;
-  color: black;
-}
-
-.danger-btn {
-  margin-top: 12px;
+.tokens-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .tokens-container {
-  margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.token-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.tokens-hint {
+  margin-top: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.05em;
 }
 
+/* ─── Token Button ─────────────────────────────────────────── */
 .token {
-  padding: 8px 14px;
-  border-radius: 20px;
-  border: 1px solid #444;
-  background: #2a2a2a;
-  color: white;
+  padding: 7px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.07);
+  color: #f0f0f0;
   cursor: pointer;
+  font-size: 13.5px;
+  letter-spacing: 0.025em;
+  font-family: 'DM Mono', 'Fira Mono', monospace;
+  transition: all 0.18s ease;
+  user-select: none;
+  outline: none;
 }
 
 .token:hover {
-  background: silver;
-  color: black;
+  background: rgba(192, 192, 192, 0.18);
+  border-color: rgba(192, 192, 192, 0.45);
 }
 
-.merge-btn {
-  font-size: 11px;
-  padding: 4px 6px;
-  border-radius: 6px;
-  background: #1a1a1a;
-  border: 1px solid #555;
-  color: silver;
+.token--merge-source {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(192, 192, 192, 0.15);
+  box-shadow: 0 0 0 2px rgba(192, 192, 192, 0.8),
+    0 0 16px rgba(192, 192, 192, 0.4);
 }
 
-.merge-btn:hover {
-  background: silver;
-  color: black;
+.token--merge-target {
+  border-color: rgba(192, 192, 192, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 1px rgba(192, 192, 192, 0.35);
 }
 
-.merge-active {
-  border: 2px solid silver;
-  box-shadow: 0 0 8px rgba(192, 192, 192, 0.6);
+.token--merge-target:hover {
+  background: rgba(192, 192, 192, 0.14);
+  border-color: rgba(192, 192, 192, 0.5);
 }
 
+/* ─── Merge Banner ─────────────────────────────────────────── */
+.merge-banner {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(192, 192, 192, 0.06);
+  border: 1px solid rgba(192, 192, 192, 0.15);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Generated Items ──────────────────────────────────────── */
 .generated-container {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .generated-item {
-  background: #2a2a2a;
-  padding: 10px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
+.generated-text {
+  font-family: 'DM Mono', 'Fira Mono', monospace;
+  font-size: 13px;
+  color: #ccc;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+.generated-copy-btn {
+  flex-shrink: 0;
+  padding: 5px 13px;
+  font-size: 12px;
+  border-radius: 7px;
+  border: 1px solid rgba(192, 192, 192, 0.25);
+  background: rgba(192, 192, 192, 0.08);
+  color: #aaa;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  width: auto;
+}
+
+.generated-copy-btn:hover {
+  background: rgba(192, 192, 192, 0.22);
+  color: #fff;
+}
+
+/* ─── Toast ────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast-item {
+  background: rgba(30, 30, 30, 0.92);
+  border: 1px solid rgba(192, 192, 192, 0.25);
+  backdrop-filter: blur(12px);
+  color: #d4d4d4;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeSlideIn 0.25s ease forwards;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.toast-fading {
+  opacity: 0;
+}
+
+.toast-icon {
+  font-size: 15px;
+}
+
+/* ─── Responsive ───────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .input-group,
-  .form-row {
-    flex-direction: column;
+  .grid-two,
+  .grid-three {
+    grid-template-columns: 1fr;
   }
 }

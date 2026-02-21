@@ -1,47 +1,34 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 interface Props {
   text: string;
   onDelete: () => void;
-  onUpdate: (value: string) => void;
-  onTripleClick: () => void;
-  isMerging: boolean;
+  onCopy: () => void;
+  onMergeStart: () => void;
+  onMergeTarget: () => void;
+  isMergeSource: boolean;
+  isMergeMode: boolean;
 }
 
 const TokenButton: React.FC<Props> = ({
   text,
   onDelete,
-  onUpdate,
-  onTripleClick,
-  isMerging,
+  onCopy,
+  onMergeStart,
+  onMergeTarget,
+  isMergeSource,
+  isMergeMode,
 }) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [clickCount, setClickCount] = useState<number>(0);
   const holdTimeout = useRef<number | null>(null);
+  const didHold = useRef<boolean>(false);
   const clickTimeout = useRef<number | null>(null);
-
-  const handleClick = () => {
-    setClickCount((prev) => prev + 1);
-
-    if (clickTimeout.current) clearTimeout(clickTimeout.current);
-
-    clickTimeout.current = window.setTimeout(() => {
-      if (clickCount === 0) {
-        navigator.clipboard.writeText(text);
-      }
-      if (clickCount === 1) {
-        onDelete();
-      }
-      if (clickCount >= 2) {
-        onTripleClick();
-      }
-      setClickCount(0);
-    }, 250);
-  };
+  const clickCount = useRef<number>(0);
 
   const handleMouseDown = () => {
+    didHold.current = false;
     holdTimeout.current = window.setTimeout(() => {
-      setIsEditing(true);
+      didHold.current = true;
+      onMergeStart();
     }, 600);
   };
 
@@ -49,30 +36,42 @@ const TokenButton: React.FC<Props> = ({
     if (holdTimeout.current) clearTimeout(holdTimeout.current);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    setIsEditing(false);
-    onUpdate(e.currentTarget.innerText);
+  const handleClick = () => {
+    if (didHold.current) return;
+
+    if (isMergeMode && !isMergeSource) {
+      onMergeTarget();
+      return;
+    }
+
+    clickCount.current += 1;
+    if (clickTimeout.current) clearTimeout(clickTimeout.current);
+
+    clickTimeout.current = window.setTimeout(() => {
+      const count = clickCount.current;
+      clickCount.current = 0;
+      if (count === 1) {
+        onCopy();
+      } else if (count >= 2) {
+        onDelete();
+      }
+    }, 260);
   };
 
-  if (isEditing) {
-    return (
-      <div
-        contentEditable
-        suppressContentEditableWarning
-        className="token editing"
-        onBlur={handleBlur}
-      >
-        {text}
-      </div>
-    );
-  }
+  const tokenClass = [
+    "token",
+    isMergeSource ? "token--merge-source" : "",
+    isMergeMode && !isMergeSource ? "token--merge-target" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <button
-      className={`token ${isMerging ? "editing" : ""}`}
-      onClick={handleClick}
+      className={tokenClass}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onClick={handleClick}
     >
       {text}
     </button>
